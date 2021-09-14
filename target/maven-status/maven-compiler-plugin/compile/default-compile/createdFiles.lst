@@ -1,0 +1,8 @@
+com/mycompany/game/Constants.class
+com/mycompany/game/Connect4.class
+com/mycompany/game/Point.class
+com/mycompany/game/Color.class
+com/mycompany/game/Turn.class
+com/mycompany/game/Player.class
+com/mycompany/game/Console.class
+com/mycompany/game/Board.class
