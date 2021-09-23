@@ -19,10 +19,8 @@ public class Connect4 {
     }
 
     private boolean isConnect4(){
-        boolean isWinner = false;
-        if(this.board.isConnect4(this.turn.getPlayer())){
-            isWinner = true;
-        }else{
+        boolean isWinner = this.board.isConnect4(this.turn);
+        if(!isWinner){
             this.turn.nextTurn();
         }
         return isWinner;

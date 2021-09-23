@@ -5,10 +5,6 @@ public class Board {
 
     public Board(){
         colors = new Color[Constants.DIMENSION][Constants.DIMENSION];
-        initColors();
-    }
-
-    public void initColors(){
         for (int i=0;i<Constants.DIMENSION;i++) {
             for (int j = 0; j < Constants.DIMENSION; j++) {
                 this.colors[i][j] = Color.NULL;
@@ -28,46 +24,44 @@ public class Board {
         Console.writeln(Constants.LINE);
     }
 
-    public boolean isConnect4(Player player){
-        boolean isWinner = getWinner(player);
+    public boolean isConnect4(Turn turn){
+        boolean isWinner = isWinner(turn);
         if (isWinner){
-            Console.writeln(Constants.CONGRATULATIONS+player.getColor()+Constants.POINT);
+            Console.writeln(Constants.CONGRATULATIONS+turn.getPlayerActivated().getColor()+Constants.POINT);
         }
         return isWinner;
     }
 
-    private boolean getWinner(Player player){
+    private boolean isWinner(Turn turn){
         String[] operations = initOperations();
-        int tokens = getTotalTokens(operations,player);
-        return tokens == Constants.WINNER;
+        return getTotalTokens(operations,turn) == Constants.WINNER;
     }
 
-    private int getTotalTokens(String[] operations,Player player){
+    private int getTotalTokens(String[] operations,Turn turn){
         int tokens = 0;
         int i = 0;
         while ((i<operations.length)&&(tokens<Constants.WINNER)){
             if(i%4==0){
                 tokens = 1;
             }
-            tokens = getTokensOperations(tokens, operations[i+1], operations[i],player);
+            tokens = getTokensOperations(tokens, operations[i+1], operations[i],turn);
             i= i+2;
         }
         return tokens;
     }
 
     private String[] initOperations(){
-        String[] operations = { Constants.DIAGONAL_INVERSE, Constants.LEFT,
+        return new String[]{ Constants.DIAGONAL_INVERSE, Constants.LEFT,
                 Constants.DIAGONAL_INVERSE, Constants.RIGHT,
                 Constants.DIAGONAL, Constants.RIGHT,
                 Constants.DIAGONAL, Constants.LEFT,
                 Constants.ROW, Constants.RIGHT,
                 Constants.ROW, Constants.LEFT,
                 Constants.COLUMN, ""};
-        return operations;
     }
 
-    private int getTokensOperations(int tokens, String siteToken, String typeTarget, Player player){
-        Point origin = player.getPoint();
+    private int getTokensOperations(int tokens, String siteToken, String typeTarget, Turn turn){
+        Point origin = turn.getPlayerActivated().getPoint();
         Point target = getTarget(siteToken,typeTarget,origin);
         int numTokens = tokens;
         while(isContinue(target,typeTarget,numTokens)){
@@ -94,15 +88,13 @@ public class Board {
     }
 
     private boolean isInRange(Point target, String type){
-        boolean isInRange = false;
         if((type.equals(Constants.DIAGONAL_INVERSE))||(type.equals(Constants.DIAGONAL))){
-            isInRange = target.isInRangeDiagonal();
+            return target.isInRangeDiagonal();
         }else if(type.equals(Constants.ROW)){
-            isInRange = target.isInRangeLineal();
-        }else if(type.equals(Constants.COLUMN)){
-            isInRange = target.isInRangeColumn();
+            return target.isInRangeLineal();
+        }else{
+            return target.isInRangeColumn();
         }
-        return isInRange;
     }
 
     private Point getTarget(String siteToken, String typeTarget, Point origin){
@@ -125,33 +117,27 @@ public class Board {
     }
 
     private Point getTargetDiagonalInverse(String siteToken, Point origin){
-        Point target = null;
         if(siteToken.equals(Constants.LEFT)){
-            target = new Point(origin.getRow()-1, origin.getColumn()-1);
-        }else if(siteToken.equals(Constants.RIGHT)){
-            target = new Point(origin.getRow()+1, origin.getColumn()+1);
+            return new Point(origin.getRow()-1, origin.getColumn()-1);
+        }else{
+            return new Point(origin.getRow()+1, origin.getColumn()+1);
         }
-        return target;
     }
 
     private Point getTargetDiagonal(String type, Point origin){
-        Point target = null;
         if(type.equals(Constants.RIGHT)){
-            target = new Point(origin.getRow()-1, origin.getColumn()+1);
-        }else if(type.equals(Constants.LEFT)){
-            target = new Point(origin.getRow()+1, origin.getColumn()-1);
+            return new Point(origin.getRow()-1, origin.getColumn()+1);
+        }else{
+            return new Point(origin.getRow()+1, origin.getColumn()-1);
         }
-        return target;
     }
 
     private Point getTargetRow(String type, Point origin){
-        Point target = null;
         if(type.equals(Constants.RIGHT)){
-            target = new Point(origin.getRow(), origin.getColumn()+1);
-        }else if(type.equals(Constants.LEFT)){
-            target = new Point(origin.getRow(), origin.getColumn()-1);
+            return new Point(origin.getRow(), origin.getColumn()+1);
+        }else{
+            return new Point(origin.getRow(), origin.getColumn()-1);
         }
-        return target;
     }
 
     private Point getTargetColumn(Point origin){
@@ -171,10 +157,9 @@ public class Board {
     }
 
     private boolean isFree(Point target, Color color){
-        boolean isNull = false;
-        if(this.colors[target.getRow()][target.getColumn()].isNull()){
+        boolean isNull = this.colors[target.getRow()][target.getColumn()].isNull();
+        if(isNull){
             this.colors[target.getRow()][target.getColumn()] = color;
-            isNull = true;
         }
         return isNull;
     }

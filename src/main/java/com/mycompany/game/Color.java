@@ -13,6 +13,10 @@ public enum Color {
         return this == color;
     }
 
+    public static Color get(int ordinal){
+        return Color.values()[ordinal];
+    }
+
     public String show(){
         return (this == NULL) ? Constants.FREE : this.toString();
     }

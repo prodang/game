@@ -3,46 +3,37 @@ package com.mycompany.game;
 public class Player {
     Color color;
     Board board;
-    Point newToken;
+    Point lastToken;
 
     public Player(Board board){
         this.board = board;
-        initColor();
-    }
-
-    public Point getPoint(){
-        return this.newToken;
-    }
-
-    public void play(){
-        Point newToken = getNewToken();
-        assert this.board.isSite();
-        this.newToken = this.board.putToken(newToken,this.color);
-    }
-
-    private Point getNewToken(){
-        Console.write(Constants.GET_COLUMN);
-        Point newToken = new Point(Console.readInt());
-        assert newToken.isValid();
-        return newToken;
-    }
-
-    private void initColor(){
         Console.write(Constants.GET_COLOR);
         String newColor = Console.read().nextLine();
         assert isColorCorrect();
-        relationWithColor(newColor);
+        this.color = Color.get(getOrdinal(newColor));
+    }
+
+    public Point getPoint(){
+        return this.lastToken;
+    }
+
+    public void play(){
+        Console.write(Constants.GET_COLUMN);
+        Point newToken = new Point(Console.readInt());
+        assert newToken.isValid();
+        assert this.board.isSite();
+        this.lastToken = this.board.putToken(newToken,this.color);
     }
 
     private boolean isColorCorrect(){
         return true;
     }
 
-    private void relationWithColor(String newColor){
+    private int getOrdinal(String newColor){
         if(newColor.equals(Color.R.toString())){
-            this.color = Color.R;
+            return 0;
         }else {
-            this.color = Color.B;
+            return 1;
         }
     }
 

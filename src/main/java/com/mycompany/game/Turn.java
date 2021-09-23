@@ -10,13 +10,9 @@ public class Turn {
 
     public Turn(Board board){
         this.board = board;
-        init();
-    }
-
-    private void init(){
         this.isActivatedPlayer = 0;
         for (int i=0; i<NUM_PLAYERS; i++){
-            showPlayer();
+            Console.write(Constants.PLAYER+(this.getIsActivatedPlayer()+1)+Constants.POINT+Constants.SPACE);
             this.players[i] = new Player(this.board);
             this.nextTurn();
         }
@@ -26,15 +22,11 @@ public class Turn {
         return this.isActivatedPlayer;
     }
 
-    public Player getPlayer(){return this.players[getIsActivatedPlayer()];}
+    public Player getPlayerActivated(){return this.players[this.getIsActivatedPlayer()];}
 
     public void play(){
-        showPlayer();
-        this.players[isActivatedPlayer].play();
-    }
-
-    private void showPlayer(){
         Console.write(Constants.PLAYER+(this.getIsActivatedPlayer()+1)+Constants.POINT+Constants.SPACE);
+        this.players[isActivatedPlayer].play();
     }
 
     public void nextTurn(){
