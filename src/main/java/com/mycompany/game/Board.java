@@ -43,7 +43,7 @@ public class Board {
 
     private boolean isWinner(Turn turn){
         int i = 0;
-        int sameTokens = 0;
+        int sameTokens;
         do{
             Movement movement = null;
             String move = Movements.get(i).toString();
@@ -65,10 +65,10 @@ public class Board {
     private int getSameTokens(Movement movement, Turn turn){
         Checker checkerRight = new CheckerRight();
         Checker checkerLeft = new CheckerLeft();
-        checkerRight.sumTokens(movement,turn,this);
+        checkerRight.sumTokens(movement,turn.getPlayerActivated().getPoint(),this.getBoard());
         if(checkerRight.getTokens() != Constants.WINNER){
             checkerLeft.setTokens(checkerRight.getTokens());
-            checkerLeft.sumTokens(movement,turn,this);
+            checkerLeft.sumTokens(movement,turn.getPlayerActivated().getPoint(),this.getBoard());
             return checkerLeft.getTokens();
         }else{
             return checkerRight.getTokens();
