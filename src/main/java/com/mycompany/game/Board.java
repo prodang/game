@@ -1,5 +1,10 @@
 package com.mycompany.game;
 
+import com.mycompany.game.check.Checker;
+import com.mycompany.game.check.CheckerLeft;
+import com.mycompany.game.check.CheckerRight;
+import com.mycompany.game.move.*;
+
 public class Board {
     private Color[][] colors;
 
@@ -10,6 +15,10 @@ public class Board {
                 this.colors[i][j] = Color.NULL;
             }
         }
+    }
+
+    public Color[][] getBoard(){
+        return this.colors;
     }
 
     public void showBoard(){
@@ -33,115 +42,37 @@ public class Board {
     }
 
     private boolean isWinner(Turn turn){
-        String[] operations = initOperations();
-        return getTotalTokens(operations,turn) == Constants.WINNER;
-    }
-
-    private int getTotalTokens(String[] operations,Turn turn){
-        int tokens = 0;
         int i = 0;
-        while ((i<operations.length)&&(tokens<Constants.WINNER)){
-            if(i%4==0){
-                tokens = 1;
+        int sameTokens = 0;
+        do{
+            Movement movement = null;
+            String move = Movements.get(i).toString();
+            if(move.equals(Movements.DIAGONAL.toString())){
+                movement = new Diagonal();
+            }else if (move.equals(Movements.REVERSE_DIAGONAL.toString())){
+                movement = new ReverseDiagonal();
+            }else if (move.equals(Movements.ROW.toString())){
+                movement = new Row();
+            }else if (move.equals(Movements.COLUMN.toString())){
+                movement = new Column();
             }
-            tokens = getTokensOperations(tokens, operations[i+1], operations[i],turn);
-            i= i+2;
-        }
-        return tokens;
+            sameTokens = this.getSameTokens(movement,turn);
+            i++;
+        }while((i<Movements.values().length) && (sameTokens!=Constants.WINNER));
+        return sameTokens == Constants.WINNER;
     }
 
-    private String[] initOperations(){
-        return new String[]{ Constants.DIAGONAL_INVERSE, Constants.LEFT,
-                Constants.DIAGONAL_INVERSE, Constants.RIGHT,
-                Constants.DIAGONAL, Constants.RIGHT,
-                Constants.DIAGONAL, Constants.LEFT,
-                Constants.ROW, Constants.RIGHT,
-                Constants.ROW, Constants.LEFT,
-                Constants.COLUMN, ""};
-    }
-
-    private int getTokensOperations(int tokens, String siteToken, String typeTarget, Turn turn){
-        Point origin = turn.getPlayerActivated().getPoint();
-        Point target = getTarget(siteToken,typeTarget,origin);
-        int numTokens = tokens;
-        while(isContinue(target,typeTarget,numTokens)){
-            if (isSame(origin,target)) {
-                numTokens++;
-            }else{
-                numTokens = tokens;
-            }
-            origin = target;
-            target = getTarget(siteToken,typeTarget,origin);
-        }
-        return numTokens;
-    }
-
-    private boolean isContinue(Point target, String typeTarget, int numTokens){
-        return (isInRange(target,typeTarget))&&(!this.colors[target.getRow()][target.getColumn()].isNull())
-                &&(numTokens<Constants.WINNER);
-    }
-
-    private boolean isSame(Point pointOrigin, Point pointTarget){
-        Color origin = this.colors[pointOrigin.getRow()][pointOrigin.getColumn()];
-        Color target = this.colors[pointTarget.getRow()][pointTarget.getColumn()];
-        return origin.equals(target);
-    }
-
-    private boolean isInRange(Point target, String type){
-        if((type.equals(Constants.DIAGONAL_INVERSE))||(type.equals(Constants.DIAGONAL))){
-            return target.isInRangeDiagonal();
-        }else if(type.equals(Constants.ROW)){
-            return target.isInRangeLineal();
+    private int getSameTokens(Movement movement, Turn turn){
+        Checker checkerRight = new CheckerRight();
+        Checker checkerLeft = new CheckerLeft();
+        checkerRight.sumTokens(movement,turn,this);
+        if(checkerRight.getTokens() != Constants.WINNER){
+            checkerLeft.setTokens(checkerRight.getTokens());
+            checkerLeft.sumTokens(movement,turn,this);
+            return checkerLeft.getTokens();
         }else{
-            return target.isInRangeColumn();
+            return checkerRight.getTokens();
         }
-    }
-
-    private Point getTarget(String siteToken, String typeTarget, Point origin){
-        Point target = null;
-        switch (typeTarget) {
-            case Constants.DIAGONAL_INVERSE:
-                target = getTargetDiagonalInverse(siteToken, origin);
-                break;
-            case Constants.DIAGONAL:
-                target = getTargetDiagonal(siteToken, origin);
-                break;
-            case Constants.ROW:
-                target = getTargetRow(siteToken, origin);
-                break;
-            case Constants.COLUMN:
-                target = getTargetColumn(origin);
-                break;
-        }
-        return target;
-    }
-
-    private Point getTargetDiagonalInverse(String siteToken, Point origin){
-        if(siteToken.equals(Constants.LEFT)){
-            return new Point(origin.getRow()-1, origin.getColumn()-1);
-        }else{
-            return new Point(origin.getRow()+1, origin.getColumn()+1);
-        }
-    }
-
-    private Point getTargetDiagonal(String type, Point origin){
-        if(type.equals(Constants.RIGHT)){
-            return new Point(origin.getRow()-1, origin.getColumn()+1);
-        }else{
-            return new Point(origin.getRow()+1, origin.getColumn()-1);
-        }
-    }
-
-    private Point getTargetRow(String type, Point origin){
-        if(type.equals(Constants.RIGHT)){
-            return new Point(origin.getRow(), origin.getColumn()+1);
-        }else{
-            return new Point(origin.getRow(), origin.getColumn()-1);
-        }
-    }
-
-    private Point getTargetColumn(Point origin){
-        return new Point(origin.getRow()+1, origin.getColumn());
     }
 
     public boolean isSite(){
