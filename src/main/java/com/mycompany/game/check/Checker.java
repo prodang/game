@@ -3,7 +3,7 @@ package com.mycompany.game.check;
 import com.mycompany.game.*;
 import com.mycompany.game.move.*;
 
-public abstract class Checker {
+public abstract class Checker implements SuperChecker{
     private int sameTokens;
 
     public Checker(){
@@ -18,19 +18,19 @@ public abstract class Checker {
         this.sameTokens = tokens;
     }
 
-    private boolean isContinue(Movement movement, Point target, int numTokens, Board board){
+    private boolean isContinue(Movement movement, Point target, int numTokens, Color[][] board){
         return isInRange(movement,target)
-                &&(!board.getBoard()[target.getRow()][target.getColumn()].isNull())
+                &&(!board[target.getRow()][target.getColumn()].isNull())
                 &&(numTokens< Constants.WINNER);
     }
-    private boolean isSame(Point pointOrigin, Point pointTarget, Board board){
-        Color origin = board.getBoard()[pointOrigin.getRow()][pointOrigin.getColumn()];
-        Color target = board.getBoard()[pointTarget.getRow()][pointTarget.getColumn()];
+    private boolean isSame(Point pointOrigin, Point pointTarget, Color[][] board){
+        Color origin = board[pointOrigin.getRow()][pointOrigin.getColumn()];
+        Color target = board[pointTarget.getRow()][pointTarget.getColumn()];
         return origin.equals(target);
     }
 
-    public void sumTokens(Movement movement, Turn turn, Board board){
-        Point origin = turn.getPlayerActivated().getPoint();
+    public void sumTokens(Movement movement, Point pointPlayer, Color[][] board){
+        Point origin = pointPlayer;
         Point target = this.getTarget(movement, origin);
         int numTokens = this.getTokens();
         while(this.isContinue(movement,target,numTokens,board)){
