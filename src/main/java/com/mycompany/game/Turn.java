@@ -12,7 +12,7 @@ public class Turn {
         this.board = board;
         this.isActivatedPlayer = 0;
         for (int i=0; i<NUM_PLAYERS; i++){
-            Console.write(Constants.PLAYER+(this.getIsActivatedPlayer()+1)+Constants.POINT+Constants.SPACE);
+            Console.getInstance().write(Constants.PLAYER+(this.getIsActivatedPlayer()+1)+Constants.POINT+Constants.SPACE);
             this.players[i] = new Player(this.board);
             this.nextTurn();
         }
@@ -25,7 +25,7 @@ public class Turn {
     public Player getPlayerActivated(){return this.players[this.getIsActivatedPlayer()];}
 
     public void play(){
-        Console.write(Constants.PLAYER+(this.getIsActivatedPlayer()+1)+Constants.POINT+Constants.SPACE);
+        Console.getInstance().write(Constants.PLAYER+(this.getIsActivatedPlayer()+1)+Constants.POINT+Constants.SPACE);
         this.players[isActivatedPlayer].play();
     }
 

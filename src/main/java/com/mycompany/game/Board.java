@@ -18,21 +18,21 @@ public class Board {
     }
 
     public void showBoard(){
-        Console.writeln(Constants.LINE);
+        Console.getInstance().writeln(Constants.LINE);
         for (int i=0;i<Constants.DIMENSION;i++){
-            Console.write(Constants.LIMIT+Constants.SPACE);
+            Console.getInstance().write(Constants.LIMIT+Constants.SPACE);
             for (int j=0;j<Constants.DIMENSION;j++){
-                Console.write(this.colors[i][j].show()+Constants.SPACE);
+                Console.getInstance().write(this.colors[i][j].show()+Constants.SPACE);
             }
-            Console.writeln(Constants.LIMIT);
+            Console.getInstance().writeln(Constants.LIMIT);
         }
-        Console.writeln(Constants.LINE);
+        Console.getInstance().writeln(Constants.LINE);
     }
 
     public boolean isConnect4(Turn turn){
         boolean isWinner = this.isWinner(turn);
         if (isWinner){
-            Console.writeln(Constants.CONGRATULATIONS+turn.getPlayerActivated().getColor()+Constants.POINT);
+            Console.getInstance().writeln(Constants.CONGRATULATIONS+turn.getPlayerActivated().getColor()+Constants.POINT);
         }
         return isWinner;
     }
