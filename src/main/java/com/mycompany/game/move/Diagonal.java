@@ -6,13 +6,13 @@ import com.mycompany.game.check.SuperChecker;
 
 public class Diagonal extends Movement{
     @Override
-    public Point getTargetRight(SuperChecker superchecker, Point origin) {
-        return superchecker.getRight(this, origin);
+    public Point getTargetRight(SuperChecker superchecker) {
+        return superchecker.getRight(this);
     }
 
     @Override
-    public Point getTargetLeft(SuperChecker superchecker, Point origin) {
-        return superchecker.getLeft(this, origin);
+    public Point getTargetLeft(SuperChecker superchecker) {
+        return superchecker.getLeft(this);
     }
 
     @Override

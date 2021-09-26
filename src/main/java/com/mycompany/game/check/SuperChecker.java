@@ -8,15 +8,15 @@ import com.mycompany.game.move.Row;
 
 public interface SuperChecker {
 
-    public Point getRight(Diagonal diagonal, Point origin);
-    public Point getRight(ReverseDiagonal reverseDiagonal, Point origin);
-    public Point getRight(Row row, Point origin);
-    public Point getRight(Column column, Point origin);
+    public Point getRight(Diagonal diagonal);
+    public Point getRight(ReverseDiagonal reverseDiagonal);
+    public Point getRight(Row row);
+    public Point getRight(Column column);
 
-    public Point getLeft(Diagonal diagonal, Point origin);
-    public Point getLeft(ReverseDiagonal reverseDiagonal, Point origin);
-    public Point getLeft(Row row, Point origin);
-    public Point getLeft(Column column, Point origin);
+    public Point getLeft(Diagonal diagonal);
+    public Point getLeft(ReverseDiagonal reverseDiagonal);
+    public Point getLeft(Row row);
+    public Point getLeft(Column column);
 
     public boolean isInRange(Diagonal diagonal, Point target);
     public boolean isInRange(ReverseDiagonal reverseDiagonal, Point target);

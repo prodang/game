@@ -9,7 +9,6 @@ public class Player {
         this.board = board;
         Console.write(Constants.GET_COLOR);
         String newColor = Console.read().nextLine();
-        assert isColorCorrect();
         this.color = Color.get(getOrdinal(newColor));
     }
 
@@ -20,13 +19,7 @@ public class Player {
     public void play(){
         Console.write(Constants.GET_COLUMN);
         Point newToken = new Point(Console.readInt());
-        assert newToken.isValid();
-        assert this.board.isSite();
         this.lastToken = this.board.putToken(newToken,this.color);
-    }
-
-    private boolean isColorCorrect(){
-        return true;
     }
 
     private int getOrdinal(String newColor){

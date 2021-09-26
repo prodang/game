@@ -9,7 +9,7 @@ public class Board {
     private Color[][] colors;
 
     public Board(){
-        colors = new Color[Constants.DIMENSION][Constants.DIMENSION];
+        this.colors = new Color[Constants.DIMENSION][Constants.DIMENSION];
         for (int i=0;i<Constants.DIMENSION;i++) {
             for (int j = 0; j < Constants.DIMENSION; j++) {
                 this.colors[i][j] = Color.NULL;
@@ -17,16 +17,12 @@ public class Board {
         }
     }
 
-    public Color[][] getBoard(){
-        return this.colors;
-    }
-
     public void showBoard(){
         Console.writeln(Constants.LINE);
         for (int i=0;i<Constants.DIMENSION;i++){
             Console.write(Constants.LIMIT+Constants.SPACE);
             for (int j=0;j<Constants.DIMENSION;j++){
-                Console.write(colors[i][j].show()+Constants.SPACE);
+                Console.write(this.colors[i][j].show()+Constants.SPACE);
             }
             Console.writeln(Constants.LIMIT);
         }
@@ -34,7 +30,7 @@ public class Board {
     }
 
     public boolean isConnect4(Turn turn){
-        boolean isWinner = isWinner(turn);
+        boolean isWinner = this.isWinner(turn);
         if (isWinner){
             Console.writeln(Constants.CONGRATULATIONS+turn.getPlayerActivated().getColor()+Constants.POINT);
         }
@@ -45,17 +41,7 @@ public class Board {
         int i = 0;
         int sameTokens;
         do{
-            Movement movement = null;
-            String move = Movements.get(i).toString();
-            if(move.equals(Movements.DIAGONAL.toString())){
-                movement = new Diagonal();
-            }else if (move.equals(Movements.REVERSE_DIAGONAL.toString())){
-                movement = new ReverseDiagonal();
-            }else if (move.equals(Movements.ROW.toString())){
-                movement = new Row();
-            }else if (move.equals(Movements.COLUMN.toString())){
-                movement = new Column();
-            }
+            Movement movement = Movements.get(i).createMovement();
             sameTokens = this.getSameTokens(movement,turn);
             i++;
         }while((i<Movements.values().length) && (sameTokens!=Constants.WINNER));
@@ -63,26 +49,22 @@ public class Board {
     }
 
     private int getSameTokens(Movement movement, Turn turn){
-        Checker checkerRight = new CheckerRight();
-        Checker checkerLeft = new CheckerLeft();
-        checkerRight.sumTokens(movement,turn.getPlayerActivated().getPoint(),this.getBoard());
+        Checker checkerRight = new CheckerRight(turn.getPlayerActivated().getPoint());
+        Checker checkerLeft = new CheckerLeft(turn.getPlayerActivated().getPoint());
+        checkerRight.sumTokens(movement,this.colors);
         if(checkerRight.getTokens() != Constants.WINNER){
             checkerLeft.setTokens(checkerRight.getTokens());
-            checkerLeft.sumTokens(movement,turn.getPlayerActivated().getPoint(),this.getBoard());
+            checkerLeft.sumTokens(movement,this.colors);
             return checkerLeft.getTokens();
         }else{
             return checkerRight.getTokens();
         }
     }
 
-    public boolean isSite(){
-        return true;
-    }
-
     public Point putToken(Point newToken, Color color){
         Point target = newToken;
-        while ((target.isInRangeColumn())&&(!isFree(target,color))){
-            target = getTargetNewToken(target);
+        while ((target.isInRangeColumn())&&(!this.isFree(target,color))){
+            target = new Point(target.getRow()-1,target.getColumn());
         }
         return target;
     }
@@ -93,10 +75,6 @@ public class Board {
             this.colors[target.getRow()][target.getColumn()] = color;
         }
         return isNull;
-    }
-
-    private Point getTargetNewToken(Point origin){
-        return new Point(origin.getRow()-1,origin.getColumn());
     }
 
 }

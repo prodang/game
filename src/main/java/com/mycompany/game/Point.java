@@ -5,6 +5,7 @@ public class Point {
     private int row;
     private int column;
 
+    public Point(){this(0,0);}
     public Point(int column){
         this(Constants.DIMENSION-1,column);
     }
@@ -14,10 +15,6 @@ public class Point {
     }
 
     public boolean isInRangeLineal(){ return (this.column>=0)&&(this.column<Constants.DIMENSION); }
-
-    public boolean isValid() {
-        return true;
-    }
 
     public boolean isInRangeColumn(){
         return (this.row>=0)&&(this.row<Constants.DIMENSION);
