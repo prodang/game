@@ -7,7 +7,7 @@ public class Point {
 
     public Point(){this(0,0);}
     public Point(int column){
-        this(Constants.DIMENSION-1,column);
+        this(Constants.DIMENSION-1,column-1);
     }
     public Point (int row, int column){
         this.row = row;

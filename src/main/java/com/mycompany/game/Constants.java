@@ -11,7 +11,6 @@ public class Constants {
     public static final String SPACE = " ";
     public static final String FREE = "-";
     public static final String CONGRATULATIONS = "Congratulations!! You win with ";
-    public static final String ERROR_COLUMN = "/tError: choose a new column: ";
     public static final int DIMENSION = 8;
     public static final int WINNER = 4;
 }

@@ -7,8 +7,7 @@ public class Player {
 
     public Player(Board board){
         this.board = board;
-        Console.write(Constants.GET_COLOR);
-        String newColor = Console.read().nextLine();
+        String newColor = Console.getInstance().read();
         this.color = Color.get(getOrdinal(newColor));
     }
 
@@ -17,8 +16,7 @@ public class Player {
     }
 
     public void play(){
-        Console.write(Constants.GET_COLUMN);
-        Point newToken = new Point(Console.readInt());
+        Point newToken = new Point(Console.getInstance().readInt());
         this.lastToken = this.board.putToken(newToken,this.color);
     }
 

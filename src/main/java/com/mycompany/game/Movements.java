@@ -5,10 +5,10 @@ import com.mycompany.game.move.*;
 import java.util.function.Supplier;
 
 public enum Movements {
-    DIAGONAL(() -> new Diagonal()),
-    REVERSE_DIAGONAL(() -> new ReverseDiagonal()),
-    ROW(() -> new Row()),
-    COLUMN(() -> new Column());
+    DIAGONAL(Diagonal::new),
+    REVERSE_DIAGONAL(ReverseDiagonal::new),
+    ROW(Row::new),
+    COLUMN(Column::new);
 
     private final Supplier<Movement> movementCreator;
 

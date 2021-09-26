@@ -5,7 +5,7 @@ public class Connect4 {
     Turn turn;
 
     public Connect4(){
-        Console.writeln(Constants.TITLE);
+        Console.getInstance().writeln(Constants.TITLE);
         this.board = new Board();
         this.turn = new Turn(this.board);
     }
